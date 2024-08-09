@@ -33,10 +33,22 @@ public class Autocomplete {
             throw new IllegalArgumentException();
         }
 
+        Term[] result = findMatchingTerms(prefix);
+
+        Arrays.sort(result, Term.byReverseWeightOrder());
+
+        return result;
+    }
+
+    // Returns the number of terms that start with the given prefix.
+    public int numberOfMatches(String prefix) {
+        return findMatchingTerms(prefix).length;
+    }
+
+    private Term[] findMatchingTerms(String prefix) {
         Comparator<Term> comparator = Term.byPrefixOrder(prefix.length());
 
         Term searchTerm = new Term(prefix, 0);
-
 
         int first = BinarySearchDeluxe.firstIndexOf(terms, searchTerm, comparator);
         int last = BinarySearchDeluxe.lastIndexOf(terms, searchTerm, comparator);
@@ -50,13 +62,6 @@ public class Autocomplete {
             result[i - first] = terms[i];
         }
 
-        Arrays.sort(result, Term.byReverseWeightOrder());
-
         return result;
-    }
-
-    // Returns the number of terms that start with the given prefix.
-    public int numberOfMatches(String prefix) {
-        return allMatches(prefix).length;
     }
 }
