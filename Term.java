@@ -19,22 +19,26 @@ public class Term implements Comparable<Term> {
         this.weight = weight;
     }
 
+
     // Compares the two terms in lexicographic order by query.
     public int compareTo(Term that) {
 
         return query.compareTo(that.query);
     }
 
+
     // Returns a string representation of this term in the following format:
     // the weight, followed by a tab, followed by the query.
     public String toString() {
-        return weight + "   " + query;
+        return weight + "\t" + query;
     }
+
 
     // Compares the two terms in descending order by weight.
     public static Comparator<Term> byReverseWeightOrder() {
         return new ReverseWeightOrderComparator();
     }
+
 
     // Compares the two terms in lexicographic order,
     // but using only the first r characters of each query.
@@ -50,7 +54,7 @@ public class Term implements Comparable<Term> {
     private static class ReverseWeightOrderComparator implements Comparator<Term> {
 
         public int compare(Term o1, Term o2) {
-            return Double.compare(o2.weight, o1.weight);
+            return Long.compare(o2.weight, o1.weight);
         }
     }
 
@@ -65,7 +69,15 @@ public class Term implements Comparable<Term> {
         }
 
         public int compare(Term o1, Term o2) {
-            return o1.query.substring(0, r).compareTo(o2.query.substring(0, r));
+
+            int limit = Math.min(Math.min(o1.query.length(), o2.query.length()), r);
+            int result = o1.query.substring(0, limit).compareTo(o2.query.substring(0, limit));
+            
+            if (result == 0 && limit < r) {
+                return o1.query.length() - o2.query.length();
+            }
+
+            return result;
         }
     }
 }
