@@ -10,13 +10,30 @@ public class BinarySearchDeluxe {
             throw new IllegalArgumentException();
         }
 
-        for (int i = 0; i < a.length; i++) {
-            if (comparator.compare(a[i], key) == 0) {
-                return i;
+        int left = 0;
+        int right = a.length - 1;
+
+        int result = -1;
+
+        while (left <= right) {
+
+            int middle = left + (right - left) / 2;
+
+            int compare = comparator.compare(a[middle], key);
+
+            if (compare == 0) {
+                result = middle;
+                right = middle - 1;
+            }
+            else if (compare < 0) {
+                left = middle + 1;
+            }
+            else {
+                right = middle - 1;
             }
         }
 
-        return -1;
+        return result;
     }
 
     // Returns the index of the last key in the sorted array a[]
@@ -27,12 +44,29 @@ public class BinarySearchDeluxe {
             throw new IllegalArgumentException();
         }
 
-        for (int i = a.length - 1; i >= 0; i--) {
-            if (comparator.compare(a[i], key) == 0) {
-                return i;
+        int left = 0;
+        int right = a.length - 1;
+
+        int result = -1;
+
+        while (left <= right) {
+
+            int middle = left + (right - left) / 2;
+
+            int compare = comparator.compare(a[middle], key);
+
+            if (compare == 0) {
+                result = middle;
+                left = middle + 1;
+            }
+            else if (compare < 0) {
+                left = middle + 1;
+            }
+            else {
+                right = middle - 1;
             }
         }
 
-        return -1;
+        return result;
     }
 }
